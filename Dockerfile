@@ -1,5 +1,5 @@
 # ========================================================
-# ----->> Stage: Builder
+# Stage: Builder
 # ========================================================
 FROM golang:1.25-alpine AS builder
 WORKDIR /app
@@ -19,7 +19,7 @@ RUN go build -ldflags "-w -s" -o build/x-ui main.go
 RUN ./DockerInit.sh "$TARGETARCH"
 
 # ========================================================
-# ----->> Stage: Final Image of X-Panel
+# Stage: Final Image of X-Panel
 # ========================================================
 FROM alpine
 ENV TZ=Asia/Tehran

@@ -82,7 +82,7 @@
 "settings" = "面板設定"
 "xray" = "Xray 設定"
 "logout" = "登出"
-"link" = "管理/設定資料庫"
+"link" = "管理"
 "navigation" = "實用導覽"
 
 [pages.login]
@@ -108,7 +108,7 @@
 "memory" = "記憶體"
 "hard" = "磁碟"
 "threads" = "執行緒"
-"xrayStatus" = "Xray 運作狀態"
+"xrayStatus" = "Xray"
 "stopXray" = "停止"
 "restartXray" = "重啟"
 "xraySwitch" = "版本"
@@ -154,13 +154,6 @@
 "readDatabaseError" = "讀取資料庫時發生錯誤"
 "getDatabaseError" = "擷取資料庫時發生錯誤"
 "getConfigError" = "擷取設定檔時發生錯誤"
-"betterPanel" = "一個更好的面板"
-"builtOnXray" = "基於 Xray Core 建置"
-"xpanelTitle" = "〔X-Panel面板〕"
-"tgPrivateChat" = "TG私聊交流"
-"tgGroupChat" = "〔X-Panel面板〕交流群"
-"portCheck" = "連接埠偵測"
-"speedTest" = "網路測速"
 
 [pages.inbounds]
 "allTimeTraffic" = "累計總流量"
@@ -322,11 +315,10 @@
 "clickToCopyHint" = "（點圖也可複製）"
 "linkCreated" = "入站連結已創建，請複製以下地址："
 "descriptionTitle" = "\r\n\r\n用法說明："
-"descriptionContent" = "1、此功能將自動產生 VLESS + TCP + Reality (xtls-rprx-vision) 和 VLESS + XHTTP + Reality 協定的入站，以上最前面兩種協定組合適合直連，\r\n2、或 VLESS Encryption + XHTTP + TLS（可選套CDN）協定的入站，\r\n3、並隨機分配一個可用端口，請確保此端口放行，生成後請直接複製【鏈接地址】，\r\n4、此處的【一鍵配置】生成功能，跟【入站】的數據是打通的，\r\n5、你可以在一鍵創建後於列表中，手動查看/複製或編輯信息，以便添加其他參數。"
+"descriptionContent" = "此功能將自動產生 VLESS + TCP + Reality (xtls-rprx-vision) 協議的入站，\r\n或 VLESS Encryption + XHTTP + TLS（可選套CDN）協定的入站，\r\n並隨機分配一個可用端口，請確保此端口放行，生成後請直接複製【鏈接地址】，\r\n此處的【一鍵配置】生成功能，跟【入站】的數據是打通的，\r\n你可以在一鍵創建後於列表中，手動查看/複製或編輯信息，以便添加其他參數。"
 
 [pages.inbounds.oneClick.preset]
 "vless_reality" = "VLESS + TCP + Reality + Vision"
-"vless_xhttp_reality" = "VLESS + XHTTP + Reality"
 "vless_tls_encryption" = "VLESS Encryption + TLS（可選套CDN）"
 "switch_vision_seed_dev" = "Switch + Vision Seed (開發中)"
 
@@ -665,7 +657,7 @@
 "status" = "✅ 機器人正常運作！"
 "usage" = "❗ 請輸入要搜尋的文字！"
 "getID" = "🆔 您的 ID 為：<code>{{ .ID }}</code>"
-"helpAdminCommands" = "要重新啟動 Xray Core：\r\n<code>/restart</code>\r\n\n要搜尋客戶電子郵件：\r\n<code>/usage [電子郵件]</code>\r\n\r\n要搜尋入站（有客戶統計資料）：\r\n<code>\r\n\r\n要搜尋入站（有客戶統計資料）：\r\n<code> [備註]</code>\r\n\r\nTelegram聊天ID：\r\n<code>/id</code>\r\n\r\n一鍵設定：\r\n<code>/oneclick</code>\r\n\r\n訂閱轉換：\r\n<code>/subconverter</code>\r\n\r\n重啟〔X-Panel 面板〕：\r\n<code>/restartX</code>"
+"helpAdminCommands" = "要重新啟動 Xray Core：\r\n<code>/restart</code>\r\n\r\n要搜尋客戶電子郵件：\r\n<code>/usage [電子郵件]</code>\r\n\r\n要搜尋入站（帶有客戶統計資料）：\r\n<code>/inbound [備註]</code>\r\n\r\nTelegram 聊天 ID：\r\n<code>/id</code>"
 "helpClientCommands" = "要搜尋統計資料，請使用以下指令：\r\n<code>/usage [電子郵件]</code>\r\n\r\nTelegram 聊天 ID：\r\n<code>/id</code>"
 "restartUsage" = "\r\n\r\n<code>/restart</code>"
 "restartSuccess" = "✅ 操作成功！"
@@ -686,7 +678,7 @@
 "datetime" = "⏰ 日期時間：{{ .DateTime }}\r\n"
 "hostname" = "💻 主機名稱：{{ .Hostname }}\r\n"
 "version" = "🚀 X-Panel 版本：v{{ .Version }}\r\n"
-"xrayVersion" = "📡 Xray Core 版本：v{{ .XrayVersion }}\r\n"
+"xrayVersion" = "📡 Xray 版本：v{{ .XrayVersion }}\r\n"
 "ipv6" = "🌐 IPv6：{{ .IPv6 }}\r\n"
 "ipv4" = "🌐 IPv4：{{ .IPv4 }}\r\n"
 "ip" = "🌐 IP：{{ .IP }}\r\n"
@@ -751,7 +743,7 @@
 "confirmRemoveTGUser" = "✅ 確認移除 Telegram 用戶？"
 "confirmToggle" = "✅ 確認啟用/停用用戶？"
 "dbBackup" = "獲取資料庫備份"
-"serverUsage" = "🌐伺服器狀態"
+"serverUsage" = "伺服器狀態"
 "getInbounds" = "獲取入站資訊"
 "depleteSoon" = "即將耗盡"
 "clientUsage" = "獲取使用情況"
@@ -783,9 +775,7 @@
 "change_email" = "⚙️📧 電子郵件"
 "change_comment" = "⚙️💬 評論"
 "ResetAllTraffics" = "重設所有流量"
-"SortedTrafficUsageReport" = "流量使用報告"
-"oneClick" = "🚀 一鍵配置"
-"subconverter" = "🔄 訂閱轉換"
+"SortedTrafficUsageReport" = "排序的流量使用報告"
 
 [tgbot.answers]
 "successfulOperation" = "✅ 成功！"

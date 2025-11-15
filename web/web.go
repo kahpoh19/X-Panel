@@ -49,32 +49,6 @@ type wrapAssetsFS struct {
 	embed.FS
 }
 
-// Keep-Alive 监听器包装器：用于拦截新连接并设置 Keep-Alive 选项
-type keepAliveListener struct {
-	*net.TCPListener
-	KeepAlivePeriod time.Duration
-}
-
-// Accept 方法：拦截连接并设置 Keep-Alive
-func (l keepAliveListener) Accept() (net.Conn, error) {
-	// 1. 接受底层 TCP 连接
-	tc, err := l.TCPListener.AcceptTCP()
-	if err != nil {
-		return nil, err
-	}
-	
-	// 2. 在 *net.TCPConn 上设置 Keep-Alive 属性 (这里的方法是正确的)
-	if err := tc.SetKeepAlive(true); err != nil {
-		logger.Warning("Failed to set KeepAlive:", err)
-	}
-	// 设置心跳包周期为 5 秒
-	if err := tc.SetKeepAlivePeriod(l.KeepAlivePeriod); err != nil {
-		logger.Warning("Failed to set KeepAlivePeriod:", err)
-	}
-	
-	return tc, nil
-}
-
 func (f *wrapAssetsFS) Open(name string) (fs.File, error) {
 	file, err := f.FS.Open("assets/" + name)
 	if err != nil {
@@ -118,9 +92,7 @@ type Server struct {
 
 	xrayService    service.XrayService
 	settingService service.SettingService
-	tgbotService    service.TelegramService
-	// 〔中文注释〕: 添加这个字段，用来“持有”从 main.go 传递过来的 serverService 实例。
-	serverService  service.ServerService
+	tgbotService   service.Tgbot
 
 	cron *cron.Cron
 
@@ -128,23 +100,13 @@ type Server struct {
 	cancel context.CancelFunc
 }
 
-
-// 【新增方法】：用于 main.go 将创建好的 tgBotService 注入进来
-func (s *Server) SetTelegramService(tgService service.TelegramService) {
-    s.tgbotService = tgService
-}
-
-// 〔中文注释〕: 1. 让 NewServer 能够接收一个 serverService 实例作为参数。
-func NewServer(serverService service.ServerService) *Server {
+func NewServer() *Server {
 	ctx, cancel := context.WithCancel(context.Background())
 	return &Server{
 		ctx:    ctx,
 		cancel: cancel,
-		// 〔中文注释〕: 2. 将传入的 serverService 存储到 Server 结构体的字段中。
-		serverService: serverService,
 	}
 }
-
 
 func (s *Server) getHtmlFiles() ([]string, error) {
 	files := make([]string, 0)
@@ -281,8 +243,7 @@ func (s *Server) initRouter() (*gin.Engine, error) {
 	g := engine.Group(basePath)
 
 	s.index = controller.NewIndexController(g)
-	// 〔中文注释〕: 调用我们刚刚改造过的 NewServerController，并将 s.serverService 作为参数传进去。
-	s.server = controller.NewServerController(g, s.serverService)
+	s.server = controller.NewServerController(g)
 	s.panel = controller.NewXUIController(g)
 	s.api = controller.NewAPIController(g)
 
@@ -406,30 +367,10 @@ func (s *Server) Start() (err error) {
 		listenAddr = net.JoinHostPort(listen, strconv.Itoa(port))
 	}
 
-	 // 1. 使用 baseListener 临时变量接收 net.Listen 的结果，这是底层的 TCP 监听器
-     baseListener, err := net.Listen("tcp", listenAddr)
-     if err != nil {
-	    return err
-    }
-
-     // 声明最终要使用的 listener 变量
-     var listener net.Listener
-
-     // 2. 尝试将 net.Listener 断言为 *net.TCPListener，以便进行更底层的设置
-     tcpListener, ok := baseListener.(*net.TCPListener)
-     if !ok {
-	    // 如果断言失败 (例如在某些特殊环境或测试中)，则直接使用原始的 listener，不设置 Keep-Alive
-	      logger.Warning("监听器不是 TCPListener 类型, 无法设置 Keep-Alive。")
-	      listener = baseListener
-     } else {
-	 // 3. 【核心功能】: 使用自定义的包装器为每一个新的连接设置 Keep-Alive 属性
-	 kaListener := &keepAliveListener{
-	 TCPListener:     tcpListener,
-	 KeepAlivePeriod: 5 * time.Second, // 将 Keep-Alive 探测周期设置为 5 秒
-	 }
-	 // 将包装后的监听器赋值给最终的 listener 变量，后续流程将使用这个新的 listener
-	 listener = net.Listener(kaListener)
-     }
+	listener, err := net.Listen("tcp", listenAddr)
+	if err != nil {
+		return err
+	}
 
 	// 再次检查证书，配置 TLS Listener
 	if certFile != "" && keyFile != "" {
@@ -445,14 +386,9 @@ func (s *Server) Start() (err error) {
 	}
 	s.listener = listener
 
-	// 修改 s.httpServer 的初始化代码
 	s.httpServer = &http.Server{
 		Handler: engine,
-		// 【新增】：设置 120 秒的读写超时，确保 ufw 命令有足够的时间完成
-		ReadTimeout:  120 * time.Second, 
-		WriteTimeout: 120 * time.Second, 
 	}
-
 
 	go func() {
 		s.httpServer.Serve(listener)
@@ -460,17 +396,11 @@ func (s *Server) Start() (err error) {
 
 	s.startTask()
 
-	// 启动 TG Bot
-    isTgbotenabled, err := s.settingService.GetTgbotEnabled()
-    if (err == nil) && (isTgbotenabled) {
-        // 现在直接在注入的实例上调用 Start 方法，而不是 NewTgbot()
-        // 因为 main.go 已经注入了完整的实例
-        if tgbot, ok := s.tgbotService.(*service.Tgbot); ok {
-            tgbot.Start(i18nFS)
-        } else {
-            logger.Warning("Telegram Bot 已启用，但注入的实例类型不正确或为 nil，无法启动。")
-        }
-    }
+	isTgbotenabled, err := s.settingService.GetTgbotEnabled()
+	if (err == nil) && (isTgbotenabled) {
+		tgBot := s.tgbotService.NewTgbot()
+		tgBot.Start(i18nFS)
+	}
 
 	return nil
 }
@@ -481,11 +411,8 @@ func (s *Server) Stop() error {
 	if s.cron != nil {
 		s.cron.Stop()
 	}
-	// 只有在断言成功后，才能调用只在 *service.Tgbot 上定义的 Stop() 和 IsRunning() 方法。
-	if tgBot, ok := s.tgbotService.(*service.Tgbot); ok {
-		if tgBot.IsRunning() {
-			tgBot.Stop()
-		}
+	if s.tgbotService.IsRunning() {
+		s.tgbotService.Stop()
 	}
 	var err1 error
 	var err2 error

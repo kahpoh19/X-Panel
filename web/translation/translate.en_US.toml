@@ -81,7 +81,7 @@
 "settings" = "Panel Settings"
 "xray" = "Xray Configs"
 "logout" = "Log Out"
-"link" = "Manage/Configure Database"
+"link" = "Manage"
 "navigation" = "Practical Navigation"
 
 [pages.login]
@@ -98,7 +98,7 @@
 "successLogin" = " You have successfully logged into your account."
 
 [pages.index]
-"title" = "System Status"
+"title" = "Overview"
 "cpu" = "CPU"
 "logicalProcessors" = "Logical Processors"
 "frequency" = "Frequency"
@@ -106,7 +106,7 @@
 "storage" = "Storage"
 "memory" = "RAM"
 "threads" = "Threads"
-"xrayStatus" = "Xray Running Status"
+"xrayStatus" = "Xray"
 "stopXray" = "Stop"
 "restartXray" = "Restart"
 "xraySwitch" = "Version"
@@ -152,13 +152,6 @@
 "readDatabaseError" = "An error occurred while reading the database."
 "getDatabaseError" = "An error occurred while retrieving the database."
 "getConfigError" = "An error occurred while retrieving the config file."
-"betterPanel" = "A Better Panel"
-"builtOnXray" = "Built On Xray Core"
-"xpanelTitle" = "〔X-Panel〕Dashboard"
-"tgPrivateChat" = "TG Private Chat"
-"tgGroupChat" = "〔X-Panel〕Group Chat"
-"portCheck" = "Port Check"
-"speedTest" = "Speed Test"
 
 [pages.inbounds]
 "allTimeTraffic" = "All-time Traffic"
@@ -317,11 +310,10 @@
 "clickToCopyHint" = "(Click on the image to copy)"
 "linkCreated" = "The inbound link has been created, please copy the following address:"
 "descriptionTitle" = "\r\n\r\nUsage notes"
-"descriptionContent" = "1.This function will automatically generate inbound connections for the VLESS + TCP + Reality (xtls-rprx-vision) and VLESS + XHTTP + Reality protocols. The first two combinations are suitable for direct connections.\r\n2.Or for VLESS Encryption + XHTTP + TLS (with optional CDN) protocols.\r\n3.And randomly assign an available port. Please ensure that this port is open. After generating, please copy the [Link Address] directly.\r\n4.The [One-Click Configuration] generation function here is connected to the [Inbound] data.\r\n5.After one-click creation, you can manually view/copy or edit the details in the list to add other parameters."
+"descriptionContent" = "This function will automatically generate an inbound connection for the VLESS + TCP + Reality (xtls-rprx-vision) protocol,\r\nor the VLESS Encryption + XHTTP + TLS (optional CDN) protocol,\r\nand randomly assign an available port. Please ensure that this port is open. After generation, please copy the [Link Address] directly.\r\nThe [One-Click Configuration] generation function here is connected to the [Inbound] data.\r\nAfter one-click creation, you can manually view/copy or edit the details in the list to add other parameters."
 
 [pages.inbounds.oneClick.preset]
 "vless_reality" = "VLESS + TCP + Reality + Vision"
-"vless_xhttp_reality" = "VLESS + XHTTP + Reality"
 "vless_tls_encryption" = "VLESS Encryption + TLS (CDN optional)"
 "switch_vision_seed_dev" = "Switch + Vision Seed (in development)"
 
@@ -659,7 +651,7 @@
 "status" = "✅ Bot is OK!"
 "usage" = "❗ Please provide a text to search!"
 "getID" = "🆔 Your ID: <code>{{ .ID }}</code>"
-"helpAdminCommands" = "To restart Xray Core:\r\n<code>/restart</code>\r\n\r\nTo search for customer emails:\r\n<code>/usage [email]</code>\r\n\r\nTo search inbound (with customer statistics):\r\n<code>/inbound [notes]</code>\r\n\r\nTelegram chat ID:\r\n<code>/id</code>\r\n\r\nOne-click configuration:\r\n<code>/oneclick</code>\r\n\r\nSubscription conversion:\r\n<code>/subconverter</code>\r\n\r\nRestart〔X-Panel〕:\r\n<code>/restartX</code>"
+"helpAdminCommands" = "To restart Xray Core:\r\n<code>/restart</code>\r\n\r\nTo search for a client email:\r\n<code>/usage [Email]</code>\r\n\r\nTo search for inbounds (with client stats):\r\n<code>/inbound [Remark]</code>\r\n\r\nTelegram Chat ID:\r\n<code>/id</code>"
 "helpClientCommands" = "To search for statistics, use the following command:\r\n\r\n<code>/usage [Email]</code>\r\n\r\nTelegram Chat ID:\r\n<code>/id</code>"
 "restartUsage" = "\r\n\r\n<code>/restart</code>"
 "restartSuccess" = "✅ Operation successful!"
@@ -680,7 +672,7 @@
 "datetime" = "⏰ Date&Time: {{ .DateTime }}\r\n"
 "hostname" = "💻 Host: {{ .Hostname }}\r\n"
 "version" = "🚀 X-Panel Version: v{{ .Version }}\r\n"
-"xrayVersion" = "📡 Xray Core Version: v{{ .XrayVersion }}\r\n"
+"xrayVersion" = "📡 Xray Version: v{{ .XrayVersion }}\r\n"
 "ipv6" = "🌐 IPv6: {{ .IPv6 }}\r\n"
 "ipv4" = "🌐 IPv4: {{ .IPv4 }}\r\n"
 "ip" = "🌐 IP: {{ .IP }}\r\n"
@@ -745,7 +737,7 @@
 "confirmRemoveTGUser" = "✅ Confirm Remove Telegram User?"
 "confirmToggle" = "✅ Confirm Enable/Disable User?"
 "dbBackup" = "Get DB Backup"
-"serverUsage" = "🌐Server Usage"
+"serverUsage" = "Server Usage"
 "getInbounds" = "Get Inbounds"
 "depleteSoon" = "Deplete Soon"
 "clientUsage" = "Get Usage"
@@ -777,9 +769,7 @@
 "change_email" = "⚙️📧 Email"
 "change_comment" = "⚙️💬 Comment"
 "ResetAllTraffics" = "Reset All Traffics"
-"SortedTrafficUsageReport" = "Traffic Usage Report"
-"oneClick" = "🚀 One-click configuration"
-"subconverter" = "🔄 Subscription conversion"
+"SortedTrafficUsageReport" = "Sorted Traffic Usage Report"
 
 [tgbot.answers]
 "successfulOperation" = "✅ Operation successful!"
